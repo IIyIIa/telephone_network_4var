@@ -20,11 +20,11 @@
 
 Для своего проекта выберите любой паттерн из списка:
 
-• Builder
-• Abstract Factory
-• Adapter
-• Chain of responsibility
-• Command
-• Observer
-• State
-• Strategy
+1) Builder
+2) Abstract Factory
+3) Adapter
+4) Chain of responsibility
+5) Command
+6) Observer
+7) State
+8) Strategy
