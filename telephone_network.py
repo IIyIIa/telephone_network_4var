@@ -16,6 +16,7 @@ def main():
             phone_number = input("Введите телефон: ")
             password = input("Введите пароль: ")
             login(nickname, phone_number, password)
+
             connection = sqlite3.connect('telephone_network_db/telephone_network_db.sqlite')
             cursor = connection.cursor()
             sqlite_select_query = """Select * from Clients"""
