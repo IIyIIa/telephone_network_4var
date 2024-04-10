@@ -7,12 +7,12 @@ def main():
         choice = input("Выберите действие (1 - Регистрация, 2 - Вход, 3 - Выход): ")
         if choice == '1':
             nickname = input("Введите никнейм: ")
-            phone = input("Введите телефон: ")
+            phone_number = input("Введите телефон: ")
             password = input("Введите пароль: ")
             register(nickname, phone_number, password)
         elif choice == '2':
             nickname = input("Введите никнейм: ")
-            phone = input("Введите телефон: ")
+            phone_number = input("Введите телефон: ")
             password = input("Введите пароль: ")
             login(nickname, phone_number, password)
         elif choice == '3':
