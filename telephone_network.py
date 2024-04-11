@@ -8,14 +8,12 @@ def main():
         choice = input("Выберите действие (1 - Регистрация, 2 - Вход, 3 - Выход): ")
         if choice == '1':
             nickname = input("Введите никнейм: ")
-            phone_number = input("Введите телефон: ")
             password = input("Введите пароль: ")
-            register(nickname, phone_number, password)
+            register(nickname, password)
         elif choice == '2':
             nickname = input("Введите никнейм: ")
-            phone_number = input("Введите телефон: ")
             password = input("Введите пароль: ")
-            login(nickname, phone_number, password)
+            login(nickname, password)
 
             connection = sqlite3.connect('telephone_network_db/telephone_network_db.sqlite')
             cursor = connection.cursor()
