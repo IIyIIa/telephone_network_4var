@@ -1,4 +1,4 @@
-from telephone_network_db import connection, execute_query
+from telephone_network_connection_to_db import connection, execute_query
 
 create_clients_table = """
 CREATE TABLE IF NOT EXISTS Clients (
@@ -10,13 +10,13 @@ CREATE TABLE IF NOT EXISTS Clients (
 
 create_client_info_table = """
 CREATE TABLE IF NOT EXISTS Client_Info (
-        ClientID INTEGER NOT NULL PRIMARY KEY,
+        ClientID INTEGER NOT NULL PRIMARY KEY UNIQUE,
         FirstName TEXT NOT NULL,
         SecondName TEXT NOT NULL,
         Patronymic TEXT NOT NULL,
         Address TEXT NOT NULL,
         Email TEXT NOT NULL UNIQUE,
-        FOREIGN KEY (ClientID) REFERENCES Clients (ID) ON DELETE CASCADE
+        FOREIGN KEY (ClientID) REFERENCES Clients (ID)
     )
 """
 
@@ -41,23 +41,8 @@ CREATE TABLE IF NOT EXISTS Number_Call (
     )
 """
 
-trigger_query = """
-CREATE TRIGGER IF NOT EXISTS check_client_info_count
-BEFORE INSERT ON Client_Info
-FOR EACH ROW
-WHEN (
-    SELECT COUNT(*) FROM Clients
-) != (
-    SELECT COUNT(*) FROM Client_Info
-)
-BEGIN
-    SELECT RAISE(ABORT, 'У одного клиента есть только одно поле персональной информации');
-END;
-"""
-
 execute_query(connection, create_clients_table)
 execute_query(connection, create_client_info_table)
 execute_query(connection, create_devices_client_table)
 execute_query(connection, create_number_call_table)
-execute_query(connection, trigger_query)
 
