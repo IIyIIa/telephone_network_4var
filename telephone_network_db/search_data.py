@@ -16,7 +16,6 @@ def execute_read_query(connection, query):
         print(f"The error '{e}' occurred")
 
 select_from_number_call = """
-
 """
 
 number_calls = execute_read_query(connection, select_from_number_call)
