@@ -1,5 +1,8 @@
 import hashlib
 import sqlite3
+import sys
+from telephone_network_db.alchemy.database import session_factory
+from telephone_network_db.alchemy.orm import ClientsORM
 
 
 def after_login_success(nickname):
@@ -27,33 +30,27 @@ def after_login_success(nickname):
 
 
 def register(nickname, password):
-    connection = sqlite3.connect('telephone_network_db/telephone_network_db.sqlite')
-    cursor = connection.cursor()
+    session = session_factory()
     hashed_password = hashlib.sha256(password.encode()).hexdigest()
-    cursor.execute("SELECT * FROM Clients WHERE NickName=?", (nickname,))
-    existing_nickname = cursor.fetchone()
+    existing_nickname = session.query(ClientsORM).filter(ClientsORM.NickName == nickname).first()
 
     if existing_nickname:
         print("Пользователь с таким никнеймом уже существует.")
         return
     else:
-        cursor.execute("INSERT INTO Clients(NickName, Password) "
-                       "VALUES (?, ?)",
-                       (nickname, hashed_password))
-        connection.commit()
-        connection.close()
+        client_registrate = ClientsORM(NickName=nickname, Password=hashed_password)
+        session.add(client_registrate)
+        session.commit()
+        session.close()
         print("Пользователь зарегистрирован успешно!")
 
 
 def login(nickname, password):
-    connection = sqlite3.connect('telephone_network_db/telephone_network_db.sqlite')
-    cursor = connection.cursor()
+    session = session_factory()
     hashed_password = hashlib.sha256(password.encode()).hexdigest()
-    cursor.execute("SELECT * FROM CLients WHERE  NickName =? AND Password=? ",
-                   (nickname, hashed_password))
-    result = cursor.fetchone()
-    connection.close()
-    if result:
+    client_nickname_check = session.query(ClientsORM).filter(ClientsORM.NickName == nickname).first()
+    client_password_check = session.query(ClientsORM).filter(ClientsORM.Password == hashed_password).first()
+    if client_nickname_check and client_password_check:
         print("Вы успешно вошли в систему!")
         after_login_success(nickname)
     else:

@@ -1,6 +1,7 @@
 from sqlalchemy import Table, Column, Integer, String, MetaData, ForeignKey
 from sqlalchemy.orm import Mapped, mapped_column
-from database import Base
+from telephone_network_db.alchemy.database import Base
+
 
 
 class ClientsORM(Base):

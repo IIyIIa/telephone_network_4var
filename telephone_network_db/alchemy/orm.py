@@ -1,7 +1,6 @@
-from database import engine, session_factory
-from models import ClientsORM, ClientInfoORM, ClientDevicesORM, NumberCallORM
+from telephone_network_db.alchemy.database import engine, session_factory
+from telephone_network_db.alchemy.models import ClientsORM, ClientInfoORM, ClientDevicesORM, NumberCallORM
 import hashlib
-
 
 session = session_factory()
 
@@ -12,11 +11,11 @@ session = session_factory()
 
 
 # пример ORM-запроса на добавление данных в таблицу БД
-password = 'niki1967'
-password = hashlib.sha256(password.encode()).hexdigest()
-test_user = ClientsORM(NickName='vlad', Password=password)
-session.add(test_user)
-session.commit()
+# password = 'test'
+# password = hashlib.sha256(password.encode()).hexdigest()
+# test_user = ClientsORM(NickName='test', Password=password)
+# session.add(test_user)
+# session.commit()
 
 
 # пример ORM-запроса на объединение таблиц по ID
@@ -37,3 +36,5 @@ session.commit()
 # if update_user:
 #     update_user.NickName = 'test'
 #     session.commit()
+
+
