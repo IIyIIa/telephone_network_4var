@@ -14,7 +14,7 @@ def create_connection(path):
 
 
 connection = create_connection(
-    "C:\\Users\\user\\PycharmProjects\\telephone_network_4var\\telephone_network_db\\telephone_network_db.sqlite")
+    "C:\\Users\\Никита\\PycharmProjects\\telephone_network_4var\\telephone_network_db\\telephone_network_db.sqlite")
 
 
 def execute_query(connection, query):
