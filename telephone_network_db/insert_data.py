@@ -13,15 +13,15 @@ def insert_data_into_clients_table(nickname, password):
     connection.close()
     print("Пользователь зарегистрирован успешно!")
 
-insert_data_into_clients_table('nikita', 'test')
-
+insert_data_into_clients_table('nikita', 'nikita')
+insert_data_into_clients_table('test', 'test')
 
 insert_client_info = """
 INSERT INTO
     Client_Info (FirstName, SecondName, Patronymic, Address, Email)
 VALUES
-('Тестовый', 'Пользователь', 'Да', 'Евлентьево', 'test@mail.ru'),
-('Никита', 'Никита', 'Никита', 'Ипподромная', 'nikita@mail.ru')
+('Никита', 'Пупанов', 'Сергеевич', 'ЕвленИпподромнаятьево', 'nikita@mail.ru'),
+('Тест', 'Тест', 'Тест', 'Тест', 'test@mail.ru')
 """
 
 insert_client_devices = """
