@@ -26,15 +26,13 @@ session = session_factory()
 
 # пример ORM-запроса на удаление клиента по никнейму
 # delete_user = session.query(ClientsORM).filter(ClientsORM.NickName == 'test').first()
-# if delete_user:
-#     session.delete(delete_user)
-#     session.commit()
+# session.delete(delete_user)
+# session.commit()
 
 
 # пример ORM-запроса на изменение никнейма клиента
 # update_user = session.query(ClientsORM).filter(ClientsORM.NickName == 'nikita').first()
-# if update_user:
-#     update_user.NickName = 'test'
-#     session.commit()
+# update_user.NickName = 'test'
+# session.commit()
 
 

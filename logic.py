@@ -1,15 +1,43 @@
 import hashlib
 import sqlite3
-import sys
 from telephone_network_db.alchemy.database import session_factory
-from telephone_network_db.alchemy.orm import ClientsORM, ClientInfoORM, ClientDevicesORM
+from telephone_network_db.alchemy.orm import ClientsORM, ClientInfoORM, ClientDevicesORM, NumberCallORM
+from abc import ABC, abstractmethod
+
+
+class Strategy(ABC):
+    @abstractmethod
+    def calculate_cost(self, duration):
+        pass
+
+
+class BasicHomeStrategy(Strategy):
+    def calculate_cost(self, duration):
+        return duration * 2
+
+
+class PremiumHomeStrategy(Strategy):
+    def calculate_cost(self, duration):
+        return duration * 1.5
+
+
+class BasicMobileStrategy(Strategy):
+    def calculate_cost(self, duration):
+        return duration * 1.2
+
+
+class PremiumMobileStrategy(Strategy):
+    def calculate_cost(self, duration):
+        return duration * 1.05
 
 
 def after_login_success(nickname):
     session = session_factory()
     clients = session.query(ClientsORM).filter(ClientsORM.NickName == nickname).all()
-    client_info = session.query(ClientsORM, ClientInfoORM).join(ClientInfoORM, ClientsORM.ID == ClientInfoORM.ClientID).all()
-    client_devices = session.query(ClientsORM, ClientDevicesORM).join(ClientDevicesORM, ClientsORM.ID == ClientDevicesORM.ClientID).all()
+    client_info = session.query(ClientsORM, ClientInfoORM).join(ClientInfoORM,
+                                                                ClientsORM.ID == ClientInfoORM.ClientID).all()
+    client_devices = session.query(ClientsORM, ClientDevicesORM).join(ClientDevicesORM,
+                                                                      ClientsORM.ID == ClientDevicesORM.ClientID).all()
     for client in clients:
         print('Контактные данные:')
         print(f"Никнейм: {client.NickName}")
@@ -23,7 +51,46 @@ def after_login_success(nickname):
             if client_orm.ID == client.ID:
                 print(f"Номер телефона: {client_device_orm.PhoneNumber}, баланс = {client_device_orm.Balance} рублей"
                       f"\nУ вас подключен абонентский план: {client_device_orm.SubscriptionPlan}")
-    session.close()
+    while True:
+        choice = input("Выберите действие (1 - Совершить звонок, 2 - Выход): ")
+
+        if choice == '1':
+            input_number = str(input("Введите номер телефона, с которого хотите совершить звонок: "))
+            existing_number = session.query(ClientDevicesORM).filter(
+                ClientDevicesORM.PhoneNumber == input_number).first()
+            if existing_number:
+                duration = int(input("Введите продолжительность звонка в минутах: "))
+                tariff_plan = existing_number.SubscriptionPlan
+                if tariff_plan == "Базовый домашний тариф":
+                    strategy = BasicHomeStrategy()
+                elif tariff_plan == "Премиум домашний тариф":
+                    strategy = PremiumHomeStrategy()
+                elif tariff_plan == "Базовый мобильный тариф":
+                    strategy = BasicMobileStrategy()
+                elif tariff_plan == "Премиум мобильный тариф":
+                    strategy = PremiumMobileStrategy()
+                else:
+                    print("Не удалось определить тарифный план. Пожалуйста, обратитесь к администратору.")
+                    session.close()
+                    return
+                cost = strategy.calculate_cost(duration)
+                if cost > existing_number.Balance:
+                    print("Недостаточно средств на балансе для совершения звонка.")
+                else:
+                    print(f"Звонок будет стоить {cost} рублей.")
+                    new_balance = existing_number.Balance - cost
+                    existing_number.Balance = new_balance
+                    new_call = NumberCallORM(DeviceID=existing_number.ID, Duration=duration)
+                    session.add(new_call)
+                    session.commit()
+                    print(f"Баланс после звонка: {new_balance} рублей.")
+            else:
+                print("Номер телефона не найден. Пожалуйста, введите существующий номер или выберите другое действие.")
+        elif choice == '2':
+            session.close()
+            return
+        else:
+            print("Ошибка ввода. Пожалуйста, попробуйте еще раз.")
 
 
 def register(nickname, password):
