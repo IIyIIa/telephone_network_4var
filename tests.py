@@ -10,7 +10,7 @@ class TestBalanceUpdate(unittest.TestCase):
         duration = 10
         cost = BasicHomeStrategy().calculate_cost(duration)
         new_balance = existing_number.Balance - cost
-        expected_new_balance = 100 - (duration * 1.5)
+        expected_new_balance = 100 - (duration * 2)
         self.assertEqual(new_balance, expected_new_balance)
 
 

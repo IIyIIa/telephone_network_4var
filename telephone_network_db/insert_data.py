@@ -2,6 +2,7 @@ from telephone_network_connection_to_db import connection, execute_query
 import hashlib
 import sqlite3
 
+
 def insert_data_into_clients_table(nickname, password):
     connection = sqlite3.connect('telephone_network_db.sqlite')
     cursor = connection.cursor()
@@ -12,6 +13,7 @@ def insert_data_into_clients_table(nickname, password):
     connection.commit()
     connection.close()
     print("Пользователь зарегистрирован успешно!")
+
 
 insert_data_into_clients_table('nikita', 'nikita')
 insert_data_into_clients_table('test', 'test')
@@ -47,7 +49,6 @@ VALUES
 (3, 7),
 (3, 2)
 """
-
 
 execute_query(connection, insert_client_info)
 execute_query(connection, insert_client_devices)
