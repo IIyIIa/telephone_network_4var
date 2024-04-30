@@ -16,11 +16,11 @@ def execute_read_query(connection, query):
         print(f"The error '{e}' occurred")
 
 
-select_from_number_call = """
+search = """
 SELECT * FROM Number_Call WHERE DeviceID = 1
 """
 
-number_calls = execute_read_query(connection, select_from_number_call)
+number_calls = execute_read_query(connection, search)
 
 for number_call in number_calls:
     print(number_call)
