@@ -1,8 +1,5 @@
-from telephone_network_connection_to_db import create_connection
+from telephone_network_connection_to_db import create_connection, connection
 from sqlite3 import Error
-
-connection = create_connection(
-    "C:\\Users\\Никита\\PycharmProjects\\telephone_network_4var\\telephone_network_db\\telephone_network_db.sqlite")
 
 
 def execute_read_query(connection, query):
