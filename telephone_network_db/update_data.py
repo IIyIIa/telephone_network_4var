@@ -4,7 +4,7 @@ update_clients = """
 UPDATE
 Clients
 SET
-Nickname = 'n1gida'
+Nickname = 'update_nikita'
 WHERE ID = 1
 """
 
